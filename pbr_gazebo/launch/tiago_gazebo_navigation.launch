@@ -39,7 +39,6 @@
       <arg name="local_planner"  value="$(arg local_planner)"/>
       <arg name="localization"   value="$(arg localization)"/>
       <arg name="map"            value="$(arg map)"/>
-      <!--arg name="map"            value="/tmp/config/ico"/-->
       <arg name="public_sim"     value="$(arg public_sim)"/>
     </include>
 
