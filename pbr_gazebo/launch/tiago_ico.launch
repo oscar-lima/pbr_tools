@@ -3,6 +3,14 @@
   <arg name="robot" default="steel"/>
   <arg name="world"  default="ico"/>
 
+  <!-- optionally add gazebo_state_plugin to publish object information -->
+  <arg name="gazebo_use_plugins" default="false"/>
+  <arg name="gazebo_plugin_config" default="" />
+  <rosparam ns="gazebo_state_plugins"
+            if="$(arg gazebo_use_plugins)"
+            file="$(arg gazebo_plugin_config)" />
+
+
   <include file="$(find pbr_gazebo)/launch/tiago_gazebo_navigation.launch">
       <arg name="robot"          value="$(arg robot)"/>
       <arg name="global_planner" value="navfn"/>
@@ -13,6 +21,7 @@
       <arg name="gzpose"         value="-x 13.695 -y -2.39 -z -0.003 -R 0.0 -P 0.0 -Y 0.0"/>
       <arg name="world"          value="$(arg world)"/>
       <arg name="map"            value="$(find pbr_gazebo)/config/$(arg world)"/>
+      <arg name="gazebo_use_plugins" value="$(arg gazebo_use_plugins)" />
     </include>
 
 </launch>
