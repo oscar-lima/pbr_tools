@@ -5,6 +5,8 @@
   <arg name="rviz"     default="true"/>
   <arg name="gzclient" default="true"/>
 
+  <arg name="gzpose" default="-x 13.695 -y -2.39 -z -0.003 -R 0.0 -P 0.0 -Y 0.0"/>
+
   <!-- optionally add gazebo_state_plugin to publish object information -->
   <arg name="gazebo_use_plugins" default="false"/>
   <arg name="gazebo_plugin_config" default="" />
@@ -20,7 +22,8 @@
       <arg name="localization"   value="amcl"/>
       <arg name="public_sim"     value="True"/>
       <!-- <arg name="gzpose"         value="-x 0.78 -y -11.1 -z -0.003 -R 0.0 -P 0.0 -Y 70.0"/> -->
-      <arg name="gzpose"         value="-x 13.695 -y -2.39 -z -0.003 -R 0.0 -P 0.0 -Y 0.0"/>
+      <!-- <arg name="gzpose"         value="-x 13.695 -y -2.39 -z -0.003 -R 0.0 -P 0.0 -Y 0.0"/> -->
+      <arg name="gzpose"         value="$(arg gzpose)" />
       <arg name="world"          value="$(arg world)"/>
       <arg name="map"            value="$(find pbr_gazebo)/config/$(arg world)"/>
 
