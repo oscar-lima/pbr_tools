@@ -25,7 +25,7 @@
       <!-- <arg name="gzpose"         value="-x 13.695 -y -2.39 -z -0.003 -R 0.0 -P 0.0 -Y 0.0"/> -->
       <arg name="gzpose"         value="$(arg gzpose)" />
       <arg name="world"          value="$(arg world)"/>
-      <arg name="map"            value="$(find pbr_gazebo)/config/$(arg world)"/>
+      <arg name="map"            value="$(find pbr_maps)/maps/$(arg world)"/>
 
       <arg name="gazebo_use_plugins" value="$(arg gazebo_use_plugins)" />
       <arg name="rviz"     default="$(arg rviz)"/>
