@@ -134,7 +134,7 @@ int main(int argc, char** args)
                     {
                         // no? then create one!
                         ObjectCreate create;
-                        create.request.transformation.rotation.x = 1;
+                        create.request.transformation.rotation.w = 1;
 
 
                         create.request.box.min_corner.x = -dx/2.;
