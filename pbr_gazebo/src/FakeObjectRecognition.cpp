@@ -2,6 +2,7 @@
 #include <object_msgs/ObjectInfo.h>
 #include <gazebo_msgs/GetWorldProperties.h>
 #include <pbr_envire_msgs/ObjectCreate.h>
+#include <pbr_envire_msgs/ObjectRemove.h>
 #include <pbr_envire_msgs/ObjectUpdateTransform.h>
 #include <pbr_envire_msgs/ObjectUpdateBoundingBox.h>
 #include <pbr_envire_msgs/ObjectUpdateTypeConfidences.h>
@@ -21,6 +22,7 @@ int main(int argc, char** args)
     ros::service::waitForService("/gazebo_state_plugins/world/request_object", -1);
     ros::service::waitForService("/gazebo/get_world_properties", -1);
     ros::service::waitForService("ObjectCreate", -1);
+    ros::service::waitForService("ObjectRemove", -1);
 
     // create clients
     ros::ServiceClient srvList =
@@ -31,6 +33,9 @@ int main(int argc, char** args)
 
     ros::ServiceClient srvCreate =
         node.serviceClient<pbr_envire_msgs::ObjectCreate>("ObjectCreate");
+        
+    ros::ServiceClient srvRemove =
+        node.serviceClient<pbr_envire_msgs::ObjectRemove>("ObjectRemove");
 
     // pub sockets for object updates
     ros::Publisher pubBox =
@@ -48,10 +53,21 @@ int main(int argc, char** args)
     // to broadcast a pose between world frame and the robot
     tf::TransformBroadcaster br;
 
+    // keep a list of objects that have been published before, to remove them
+    // when they disappear.
+    std::map<std::string, bool> objectUpdated;
+    
     // looooooop
     ros::Rate rate(1);
     while(ros::ok())
-    {// request the names of all objects
+    {
+        // reset known objects status
+        for (auto it = objectUpdated.begin(); it != objectUpdated.end(); ++it)
+        {
+            it->second = false;
+        }
+        
+        // request the names of all objects
         gazebo_msgs::GetWorldProperties g;
         // call
         srvList.call(g);
@@ -131,6 +147,7 @@ int main(int argc, char** args)
                     ROS_INFO( "Gazebo Object: %s", models[i].c_str() );
                     // not tiago, ground_plane or ico_v1
                     // --> get information and publish stuff
+                    objectUpdated[models[i]] = true;
 
                     float dx = info.response.object.primitives[0].dimensions[0];
                     float dy = info.response.object.primitives[0].dimensions[1];
@@ -141,7 +158,7 @@ int main(int argc, char** args)
                     {
                         // no? then create one!
                         ObjectCreate create;
-                        create.request.transformation.rotation.x = 1;
+                        create.request.transformation.rotation.w = 1;
 
                         create.request.box.min_corner.x = -dx/2.;
                         create.request.box.min_corner.y = -dy/2.;
@@ -193,6 +210,23 @@ int main(int argc, char** args)
                 }
             }
         }
+        
+        // remove unseen objects
+        for (auto it = objectUpdated.begin(); it != objectUpdated.end();)
+        {
+            if (!it->second) {
+                std::cout << "fake obj rec: remove " << it->first << '\n';
+                ObjectRemove rm;
+                rm.request.uri = gazeboToEnvire[it->first];
+                std::cout << "with uri " << rm.request.uri << '\n';
+                srvRemove.call(rm);
+                it = objectUpdated.erase(it);
+                // gazeboToEnvire.erase(it->first); // segfault?!
+            } else {
+                ++it;
+            }
+        }
+        
         ros::spinOnce();
         rate.sleep();
     }
