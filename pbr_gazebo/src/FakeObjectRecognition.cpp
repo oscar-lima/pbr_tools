@@ -42,7 +42,7 @@ int main(int argc, char** args)
     tf::TransformBroadcaster br;
 
     // looooooop
-    ros::Rate rate(10);
+    ros::Rate rate(1);
     while(ros::ok())
     {// request the names of all objects
         gazebo_msgs::GetWorldProperties g;
