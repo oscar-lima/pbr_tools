@@ -4,10 +4,14 @@
 #include <pbr_envire_msgs/ObjectCreate.h>
 #include <pbr_envire_msgs/ObjectUpdateTransform.h>
 #include <pbr_envire_msgs/ObjectUpdateBoundingBox.h>
+#include <pbr_envire_msgs/ObjectUpdateTypeConfidences.h>
+#include <pbr_envire_msgs/TypeConfidence.h>
 using namespace pbr_envire_msgs;
 #include <unordered_map>
 
 #include <tf/transform_broadcaster.h>
+
+const std::string type_prefix = "http://envire.semantic/";
 
 int main(int argc, char** args)
 {
@@ -34,6 +38,9 @@ int main(int argc, char** args)
 
     ros::Publisher pubTransform =
         node.advertise<ObjectUpdateTransform>("/ObjectUpdate/Transform/in", 100);
+
+    ros::Publisher pubTypeConfidences =
+        node.advertise<ObjectUpdateTypeConfidences>("/ObjectUpdate/TypeConfidences/in", 100);
 
     // map of gazebo-obj-name --> semantic object uri
     std::unordered_map<std::string, std::string> gazeboToEnvire;
@@ -136,7 +143,6 @@ int main(int argc, char** args)
                         ObjectCreate create;
                         create.request.transformation.rotation.x = 1;
 
-
                         create.request.box.min_corner.x = -dx/2.;
                         create.request.box.min_corner.y = -dy/2.;
                         create.request.box.min_corner.z = -dz/2.;
@@ -147,6 +153,20 @@ int main(int argc, char** args)
 
                         gazeboToEnvire[models[i]] = create.response.uri;
                     }
+
+                    // set type confidence based on name
+                    size_t digitId = models[i].find_first_of("0123456789");
+                    ObjectUpdateTypeConfidences typeUpdate;
+                    typeUpdate.uri = gazeboToEnvire[models[i]];
+                    TypeConfidence typeConf;
+                    typeConf.confidence = 1.0;
+                    if (digitId != std::string::npos && digitId > 0) {
+                        typeConf.uri = type_prefix + models[i].substr(0, digitId);
+                    } else {
+                        typeConf.uri = type_prefix + models[i];
+                    }
+                    typeUpdate.confidences.push_back(typeConf);
+                    pubTypeConfidences.publish(typeUpdate);
 
                     // publish update of transformation
                     ObjectUpdateTransform tfUpdate;
@@ -169,6 +189,7 @@ int main(int argc, char** args)
                     boxUpdate.box.max_corner.z = dz/2.;
 
                     pubBox.publish(boxUpdate);
+
                 }
             }
         }
