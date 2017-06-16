@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <!-- which part of the robot shall be displayed?
+         we just need the gripper for grasp poses! -->
+    <!-- <arg name="model" default="$(find tiago_description)/urdf/gripper/gripper.urdf.xacro" /> -->
+    <arg name="model" default="$(find tiago_description)/robots/tiago_steel.urdf.xacro" />
+    
+    <!-- set it as a param to be found by state publishers(?) -->
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+    <param name="use_gui" value="true" />
+
+    <!-- state publishers -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+    <!-- launch rviz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pbr_grasp_spec)/config/grasp_spec.rviz" />
+    
+    <!-- and the grasp spec node -->
+    <node name="grasp_spec" pkg="pbr_grasp_spec" type="GraspSpec" output="screen" />
+    
+</launch>
