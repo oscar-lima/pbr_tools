@@ -4,14 +4,19 @@
 #include <tf/transform_listener.h>
 
 #include <vector>
+#include <map>
 #include <functional>
+
+#include "GraspMarker.h"
 
 using namespace visualization_msgs;
 using namespace interactive_markers;
 
 
-class ObjectMarker {
+class ObjectGraspManager {
 private:
+    std::string name;
+    
     InteractiveMarkerServer* server = NULL;
     InteractiveMarker int_marker;
     Marker mesh_marker;
@@ -19,7 +24,40 @@ private:
     InteractiveMarkerControl mx, my, mz; // move controls
     InteractiveMarkerControl rx, ry, rz; // rotate controls
     
+    // menu to add grasps
+    MenuHandler menu;
+    MenuHandler::EntryHandle menu_set_pregrasp;
+    MenuHandler::EntryHandle menu_add_grasp;
+    MenuHandler::EntryHandle menu_export_grasps;
+    
+    // menu to remove grasps
+    MenuHandler menu_rm;
+    
+    // list of already known grasps for this object
+    // std::vector<InteractiveMarker> knownGrasps;
+    std::map<std::string, InteractiveMarker> knownGrasps; // map for name->marker association
+    int countGrasps;
+    
+    // information about the current grasp and pregrasp
+    geometry_msgs::Pose currentPose;
+    geometry_msgs::Pose pregrasp;
+    geometry_msgs::Pose grasp;
+    
+    
 public:
+    ObjectGraspManager() {
+        menu_set_pregrasp = menu.insert( "set pregrasp", 
+            std::bind(&ObjectGraspManager::setPregrasp, this, std::placeholders::_1) );
+        menu_add_grasp = menu.insert( "add grasp", 
+            std::bind(&ObjectGraspManager::addGrasp, this, std::placeholders::_1) );
+        menu_export_grasps = menu.insert( "export grasps",
+            std::bind(&ObjectGraspManager::exportGrasps, this, std::placeholders::_1) );
+            
+        menu_rm.insert( "remove", 
+            std::bind(&ObjectGraspManager::removeGrasp, this, std::placeholders::_1) );
+        
+        countGrasps = 0;
+    }
     
     void init(std::string cadfile) {
         std::vector<std::string> v;
@@ -34,7 +72,7 @@ public:
     
     void init(std::vector<std::string> cadfiles, 
               std::vector<geometry_msgs::Pose> poses, std::string name) {
-        
+        this->name = name;
         // important: relative to gripper_link, that way the inverse of the
         // current pose is the desired pose of the gripper_link to the object!
         int_marker.header.frame_id = "gripper_link";
@@ -48,6 +86,8 @@ public:
         mesh_marker.color.r = 0.5;
         mesh_marker.color.a = 1.;
         mesh_control.always_visible = true;
+        mesh_control.name = "mesh_marker";
+        mesh_control.interaction_mode = InteractiveMarkerControl::MENU;
         
         for (int i = 0; i < cadfiles.size(); i++) {
             mesh_marker.mesh_resource = cadfiles[i];
@@ -101,60 +141,106 @@ public:
     void addToServer(InteractiveMarkerServer& server) {
         server.insert(
             this->getIntMarker(),
-            std::bind(&ObjectMarker::processFeedback, this, std::placeholders::_1)
+            std::bind(&ObjectGraspManager::processFeedback, this, std::placeholders::_1)
         );
         
         this->server = &server;
+        this->menu.apply(server, this->int_marker.name);
     }
     
     void processFeedback( const InteractiveMarkerFeedbackConstPtr &feedback )
     {
-        // if (feedback->pose.position.x > 0) {
-        //     this->int_marker.controls[0].markers[0].color.g = 1.;
-        // } else {
-        //     this->int_marker.controls[0].markers[0].color.g = 0.;
-        // }
-        // this->server->insert(this->int_marker);
-        // this->server->applyChanges();
+        this->currentPose = feedback->pose;
+    }
+    
+    void setPregrasp( const InteractiveMarkerFeedbackConstPtr &feedback )
+    {
+        this->pregrasp = this->currentPose;
+    }
+    
+    void addGrasp( const InteractiveMarkerFeedbackConstPtr &feedback )
+    {
+        this->grasp = this->currentPose;
+        
+        // TODO: add to known grasps, add as a marker, visualize,
+        // be able to remove a grasp, show/hide all grasps ...
+        
+        tf::Pose pre, grasp;
+        tf::poseMsgToTF(this->pregrasp, pre);
+        tf::poseMsgToTF(this->grasp, grasp);
+        
+        InteractiveMarker int_grasp = 
+            GraspMarker::create( this->pregrasp, this->grasp, this->countGrasps++ );
+            
+        this->knownGrasps[int_grasp.name] = int_grasp;
+        
+        this->server->insert( int_grasp );
+        this->menu_rm.apply( *this->server, int_grasp.name );
+        this->server->applyChanges();
+        
+        // TODO need to save inverted grasp and pregrasp (to specify the position
+        // of the gripper relative to the object, not vice versa)
+        // but visualization should be easier with the non-inverted poses
+    }
+    
+    
+    void removeGrasp( const InteractiveMarkerFeedbackConstPtr &feedback )
+    {
+        ROS_WARN( "TODO: remove %s", feedback->marker_name.c_str() );
+        this->server->erase(feedback->marker_name);
+        // TODO remove saved grasp?
+        // or have a service export them on demand? --> yaml?! :)
+        this->knownGrasps.erase(feedback->marker_name);
+        this->server->applyChanges();
+    }
+    
+    
+    void exportGrasps( const InteractiveMarkerFeedbackConstPtr &feedback )
+    {
+        std::cout << "------------------------------------------------" << '\n';
+        std::cout << "------------------------------------------------" << '\n';
+        for (auto it = this->knownGrasps.begin(); it != this->knownGrasps.end(); it++)
+        {
+            geometry_msgs::Pose pre = it->second.controls[0].markers[0].pose;
+            geometry_msgs::Pose grasp = it->second.controls[0].markers[1].pose;
+            std::cout << "grasp_setting:" << '\n';
+            std::cout << "    name: " << it->first << '\n';
+            std::cout << "    grasp: " << '\n';
+            std::cout << "        position: " << '\n';
+            std::cout << "            x: " << grasp.position.x << '\n';
+            std::cout << "            y: " << grasp.position.y << '\n';
+            std::cout << "            z: " << grasp.position.z << '\n';
+            std::cout << "        orientation: " << '\n';
+            std::cout << "            x: " << grasp.orientation.x << '\n';
+            std::cout << "            y: " << grasp.orientation.y << '\n';
+            std::cout << "            z: " << grasp.orientation.z << '\n';
+            std::cout << "            w: " << grasp.orientation.w << '\n';
+            std::cout << "    pregrasp: " << '\n';
+            std::cout << "        position: " << '\n';
+            std::cout << "            x: " << pre.position.x << '\n';
+            std::cout << "            y: " << pre.position.y << '\n';
+            std::cout << "            z: " << pre.position.z << '\n';
+            std::cout << "        orientation: " << '\n';
+            std::cout << "            x: " << pre.orientation.x << '\n';
+            std::cout << "            y: " << pre.orientation.y << '\n';
+            std::cout << "            z: " << pre.orientation.z << '\n';
+            std::cout << "            w: " << pre.orientation.w << '\n';
+            std::cout << "" << '\n';
+        }
+        std::cout << "------------------------------------------------" << '\n';
+        std::cout << "------------------------------------------------" << '\n';
     }
     
 };
 
-
-// class TiagoGripperMarker : public ObjectMarker{
-// public:
-//     TiagoGripperMarker() {
-//         std::vector<std::string> files;
-//         std::vector<geometry_msgs::Pose> poses;
-//         
-//         geometry_msgs::Pose pose;
-//         pose.orientation.w = 1;
-//         
-//         std::string pre = "package://tiago_description/meshes/gripper/";
-//         files.push_back( pre + "gripper_link.stl" ); poses.push_back( pose );
-//         files.push_back( pre + "gripper_finger_link.stl" ); poses.push_back( pose);
-//         files.push_back( pre + "gripper_finger_link.stl" ); poses.push_back( pose );
-//         
-//         init( files, poses, "Tiago-Gripper" );
-//     }
-// };
-
-
-
-// debug test
 int main(int argc, char** args) {
     ros::init(argc, args, "GraspSpec");
     
     InteractiveMarkerServer server("markers");
     
-    ObjectMarker axe;
-    axe.init("package://pbr_resources/meshes/Axe.dae");
-    
-    axe.addToServer(server);
-    
-    // TiagoGripperMarker tiago;
-    // server.insert( tiago.getIntMarker() );
-    // just load the whole robot and use tf to gripper_link.
+    ObjectGraspManager gm;
+    gm.init("package://pbr_resources/meshes/Axe.dae");
+    gm.addToServer(server);
     
     server.applyChanges();
         
