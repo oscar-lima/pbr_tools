@@ -3,16 +3,45 @@
 
  <arg name="table_model" default="$(find pbr_gazebo)/models/table_1m6_0m8_0m7/table.sdf"/>
 
-  <node name="spawn_table1" pkg="gazebo_ros" type="spawn_model"
+ <!-- Tables in room C020 -->
+  <node name="spawn_table_c020_1" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c020_1 -x 11.549729 -y -4.689257 -Y -1.578196"
+        respawn="false" output="screen" />
+
+  <node name="spawn_table_c020_2" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c020_2 -x 10.726350 -y -4.678571 -Y -1.578196"
+        respawn="false" output="screen" />
+
+  <node name="spawn_table_c020_3" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c020_3 -x 11.127464 -y -3.465231 -Y 0.0"
+        respawn="false" output="screen" />
+
+
+ <!-- Tables in room C022 -->
+  <node name="spawn_table_c022_1" pkg="gazebo_ros" type="spawn_model"
         args="-file $(arg table_model) -sdf -model table_c022_1 -x 15.773074 -y -4.670167 -z 0.00 -Y -1.578196"
         respawn="false" output="screen" />
 
-  <node name="spawn_table2" pkg="gazebo_ros" type="spawn_model"
+  <node name="spawn_table_c022_2" pkg="gazebo_ros" type="spawn_model"
         args="-file $(arg table_model) -sdf -model table_c022_2 -x 14.961558 -y -4.668027 -z 0.00 -Y -1.578196"
         respawn="false" output="screen" />
 
-  <node name="spawn_table3" pkg="gazebo_ros" type="spawn_model"
+  <node name="spawn_table_c022_3" pkg="gazebo_ros" type="spawn_model"
         args="-file $(arg table_model) -sdf -model table_c022_3 -x 15.364943 -y -3.441525 -z 0.00 -Y 0.00"
+        respawn="false" output="screen" />
+
+
+ <!-- Tables in room C024 -->
+  <node name="spawn_table_c024_1" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c024_1 -x 19.035954 -y -4.761148 -Y -1.578196"
+        respawn="false" output="screen" />
+
+  <node name="spawn_table_c024_2" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c024_2 -x 19.855301 -y -4.770370 -Y -1.578196"
+        respawn="false" output="screen" />
+
+  <node name="spawn_table_c024_3" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c024_3 -x 19.454639 -y -3.545591 -Y 0.00"
         respawn="false" output="screen" />
 
 </launch>
