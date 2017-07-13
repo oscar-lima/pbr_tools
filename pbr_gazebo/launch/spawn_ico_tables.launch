@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+ <arg name="table_model" default="$(find pbr_gazebo)/models/table_1m6_0m8_0m7/table.sdf"/>
+
+  <node name="spawn_table1" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c022_1 -x 15.773074 -y -4.670167 -z 0.00 -Y -1.578196"
+        respawn="false" output="screen" />
+
+  <node name="spawn_table2" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c022_2 -x 14.961558 -y -4.668027 -z 0.00 -Y -1.578196"
+        respawn="false" output="screen" />
+
+  <node name="spawn_table3" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg table_model) -sdf -model table_c022_3 -x 15.364943 -y -3.441525 -z 0.00 -Y 0.00"
+        respawn="false" output="screen" />
+
+</launch>
