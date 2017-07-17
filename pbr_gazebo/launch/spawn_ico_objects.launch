@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+ <arg name="pringles_model" default="$(find pbr_gazebo)/models/pringles/pringles.sdf"/>
+
+ <!-- Pringles on table in room C024 -->
+  <node name="spawn_pringles1" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg pringles_model) -sdf -model pringles1 -x 20.00 -y -4.80 -z 0.9"
+        respawn="false" output="screen" />
+
+ <!-- Pringles on table in room C022 -->
+  <node name="spawn_pringles2" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg pringles_model) -sdf -model pringles2 -x 15.92 -y -4.80 -z 0.9"
+        respawn="false" output="screen" />
+
+ <!-- Pringles on table in room C020 -->
+  <node name="spawn_pringles3" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg pringles_model) -sdf -model pringles3 -x 11.06 -y -3.24 -z 0.9"
+        respawn="false" output="screen" />
+
+ <!-- <arg name="table_model" default="$(find pbr_gazebo)/models/table_1m6_0m8_0m7/table.sdf"/> -->
+
+ <!--  <!-\-White Coffee Cup Model-\-> -->
+ <!--  <param name="coffee_cup_model" -->
+ <!--    command="$(find xacro)/xacro.py '$(find pbr_gazebo)/urdf/race_coffee_cup.urdf.xacro'" /> -->
+ <!--  <!-\-Coffee mug 1-\-> -->
+ <!--  <node name="spawn_coffee_cup1" pkg="gazebo" type="spawn_model" -->
+ <!--    args="-urdf -param coffee_cup_model -x 19 -y -4.7 -z 0.9 -R 0 -P 0 -Y 0.0 -model coffee_cup1" respawn="false" output="screen" /> -->
+
+
+ <!-- <!-\- Tables in room C024 -\-> -->
+ <!--  <node name="spawn_table1_c024" pkg="gazebo_ros" type="spawn_model" -->
+ <!--        args="-file $(arg table_model) -sdf -model table1_c024 -x 19.035954 -y -4.761148 -Y -1.578196" -->
+ <!--        respawn="false" output="screen" /> -->
+
+ <!--  <node name="spawn_table2_c024" pkg="gazebo_ros" type="spawn_model" -->
+ <!--        args="-file $(arg table_model) -sdf -model table2_c024 -x 19.855301 -y -4.770370 -Y -1.578196" -->
+ <!--        respawn="false" output="screen" /> -->
+
+ <!--  <node name="spawn_table3_c024" pkg="gazebo_ros" type="spawn_model" -->
+ <!--        args="-file $(arg table_model) -sdf -model table3_c024 -x 19.454639 -y -3.545591 -Y 0.00" -->
+ <!--        respawn="false" output="screen" /> -->
+
+</launch>
