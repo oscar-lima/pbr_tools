@@ -13,9 +13,13 @@ using namespace interactive_markers;
 
 
 // just visualization of recorded grasps
-class GraspMarker {
+class GraspMarker : public InteractiveMarker {
 public:
-    static InteractiveMarker create(geometry_msgs::Pose pre, geometry_msgs::Pose grasp, int id)
+    // store the original poses for use during serialization etc.
+    geometry_msgs::Pose originalPre, originalGrasp;
+    
+    // create the interactive-marker-part
+    static GraspMarker create(geometry_msgs::Pose pre, geometry_msgs::Pose grasp, int id)
     {
         Marker vis_pre, vis_grasp;
         
@@ -35,9 +39,10 @@ public:
         control.markers.push_back( vis_pre );
         control.markers.push_back( vis_grasp );
         
-        InteractiveMarker int_marker;
+        GraspMarker int_marker;
         int_marker.name = "grasp_" + std::to_string(id);
-        int_marker.header.frame_id = "gripper_link";
+        // int_marker.header.frame_id = "gripper_link";
+        int_marker.header.frame_id = "object";
         int_marker.controls.push_back( control );
         
         return int_marker;
