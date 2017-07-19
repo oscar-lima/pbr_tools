@@ -11,6 +11,7 @@ using namespace pbr_envire_msgs;
 #include <unordered_map>
 
 #include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
 
 const std::string type_prefix = "http://envire.semantic/";
 
@@ -57,10 +58,24 @@ int main(int argc, char** args)
     // when they disappear.
     std::map<std::string, bool> objectUpdated;
     
+    // NOTE: this is relavant to every node working with objects, e.g. EnvironmentVisualizer
+    #define OBJECTS_RELATIVE_TO_MAP 1
+    #if OBJECTS_RELATIVE_TO_MAP
+        // compromise: set semvire-root-frame equal to gazebo world, but insert
+        // objects relative to the map-frame instead!
+        // this will cause some trouble on startup or whenever the robot isn't localized
+        // properly. 
+        tf::Transform newest_transform;
+        newest_transform.setIdentity();
+        tf::TransformListener tfListener;
+        ros::Duration(3).sleep();
+    #endif
+    
     // looooooop
-    ros::Rate rate(1);
+    ros::Rate rate(5);
     while(ros::ok())
     {
+        
         // reset known objects status
         for (auto it = objectUpdated.begin(); it != objectUpdated.end(); ++it)
         {
@@ -140,8 +155,22 @@ int main(int argc, char** args)
                         transform = ref;
                     }
 
-                    br.sendTransform(tf::StampedTransform(transform.inverse(), ros::Time::now(),
-                                        "base_link", "world"));
+                    ros::Time currentTime = ros::Time::now();
+                    tf::StampedTransform world2base(transform.inverse(), currentTime,
+                                        "base_link", "world");
+                    br.sendTransform(world2base);
+                    
+                    #if OBJECTS_RELATIVE_TO_MAP
+                        // using base_link --> world and base_link --> map, get world --> map
+                        currentTime = ros::Time::now();
+                        tf::StampedTransform base2map;
+                        ROS_WARN("wait for transform");
+                        tfListener.waitForTransform("map", "base_link", currentTime, ros::Duration(10));
+                        ROS_WARN("lookup transform");    
+                        tfListener.lookupTransform("map", "base_link", currentTime, base2map);
+                        newest_transform = base2map * world2base;
+                    #endif
+                    
 
                 } else {
                     ROS_INFO( "Gazebo Object: %s", models[i].c_str() );
@@ -192,6 +221,14 @@ int main(int argc, char** args)
                     tfUpdate.transformation.translation.y = info.response.object.primitive_poses[0].position.y;
                     tfUpdate.transformation.translation.z = info.response.object.primitive_poses[0].position.z;
                     tfUpdate.transformation.rotation = info.response.object.primitive_poses[0].orientation;
+                    
+                    #if OBJECTS_RELATIVE_TO_MAP
+                        // apply world --> map transform
+                        tf::Transform inWorld;
+                        tf::transformMsgToTF(tfUpdate.transformation, inWorld);
+                        tf::Transform inMap = newest_transform * inWorld;
+                        tf::transformTFToMsg(inMap, tfUpdate.transformation);
+                    #endif
 
                     pubTransform.publish(tfUpdate);
 
