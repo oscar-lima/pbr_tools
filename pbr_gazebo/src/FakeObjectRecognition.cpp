@@ -98,13 +98,23 @@ int main(int argc, char** args)
                 info.request.get_geometry = true;
                 srvInfo.call(info);
 
-                if (models[i].find("tiago") != std::string::npos) {
+                if (models[i].find("tiago") != std::string::npos) {        
                     // publish tf!
                     // in this case, objects are located relative to the gazebo
                     // world, which is unknown to the map/robot-stuff.
                     // hence, publish tiago <--> world to create a connection
                     // between world and base_link and display the marker
                     // in the correct position
+                    
+                    // but, something to hack again: to get correct bounding boxes
+                    // I modified the gazebo-plugin -- resulting in correct position
+                    // but fixed orientation (0,0,0,1) for most of the objects.
+                    // hence, the transform is useless for tf!
+                    // to "fix" this, set get_geometry to false to just get the
+                    // full pose without geometry.
+                    info.request.get_geometry = false;
+                    srvInfo.call(info);
+                    // --
 
                     tf::Transform transform;
 
@@ -125,6 +135,7 @@ int main(int argc, char** args)
                     if (info.response.object.primitive_origin
                         == object_msgs::Object::ORIGIN_CUSTOM)
                     {
+                        ROS_ERROR( "ORIGIN CUSTOM not implemented" );
                         // custoM --> transform in object.origin
                     } else if (info.response.object.primitive_origin
                         == object_msgs::Object::ORIGIN_AVERAGE)
@@ -135,6 +146,7 @@ int main(int argc, char** args)
                         int n;
                         node.param<int>("refnum", n, 2 );
                         // which part of gazebos tiago_steel-model is the base-link?
+                        // there are no names returned by the gazebo plugin...
                         // chosen by experimentation: number 2.
                         // adjust if neccessary:
                         // rosparam set /refnum <n>
@@ -217,6 +229,7 @@ int main(int argc, char** args)
                     // publish update of transformation
                     ObjectUpdateTransform tfUpdate;
                     tfUpdate.uri = gazeboToEnvire[models[i]];
+                    
                     tfUpdate.transformation.translation.x = info.response.object.primitive_poses[0].position.x;
                     tfUpdate.transformation.translation.y = info.response.object.primitive_poses[0].position.y;
                     tfUpdate.transformation.translation.z = info.response.object.primitive_poses[0].position.z;
