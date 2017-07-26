@@ -219,7 +219,7 @@ int main(int argc, char** args)
                     TypeConfidence typeConf;
                     typeConf.confidence = 1.0;
                     if (digitId != std::string::npos && digitId > 0) {
-                        typeConf.uri = type_prefix + models[i].substr(0, digitId);
+                        typeConf.uri = type_prefix + models[i].substr(0, digitId-1);
                     } else {
                         typeConf.uri = type_prefix + models[i];
                     }
