@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include <ros/package.h>
 #include <interactive_markers/interactive_marker_server.h>
 #include <interactive_markers/menu_handler.h>
 #include <tf/transform_listener.h>
@@ -19,6 +20,7 @@ using namespace interactive_markers;
 class ObjectGraspManager {
 private:
     std::string name;
+    std::string meshfolder, graspfolder;
     
     InteractiveMarkerServer* server = NULL;
     GraspMarker int_marker;
@@ -52,7 +54,12 @@ private:
     ros::NodeHandle nh;
     
 public:
-    ObjectGraspManager() : nh("~") {
+    ObjectGraspManager(const std::string& meshfolder, const std::string& graspfolder) 
+        : nh("~") 
+    {
+        this->meshfolder = meshfolder;
+        this->graspfolder = graspfolder;
+        
         menu_set_pregrasp = menu.insert( "set pregrasp", 
             std::bind(&ObjectGraspManager::setPregrasp, this, std::placeholders::_1) );
         menu_add_grasp = menu.insert( "add grasp", 
@@ -66,22 +73,9 @@ public:
         countGrasps = 0;
     }
     
-    void init(std::string cadfile) {
-        std::vector<std::string> v;
-        v.push_back(cadfile);
-        std::vector<geometry_msgs::Pose> p;
-        geometry_msgs::Pose pose;
-        pose.orientation.w = 1;
-        p.push_back(pose);
-        
-        auto last_slash = cadfile.rfind('/');
-        init(v, p, cadfile.substr(last_slash+1));
-    }
     
-    void init(std::vector<std::string> cadfiles, 
-              std::vector<geometry_msgs::Pose> poses, std::string name) {
-        this->name = name + ".grasps";
-        std::cout << "NAME: " << this->name << '\n';
+    void init(std::string name) {
+        this->name = name;        
         // important: relative to gripper_link, that way the inverse of the
         // current pose is the desired pose of the gripper_link to the object!
         int_marker.header.frame_id = "gripper_link";
@@ -98,11 +92,10 @@ public:
         mesh_control.name = "mesh_marker";
         mesh_control.interaction_mode = InteractiveMarkerControl::MENU;
         
-        for (int i = 0; i < cadfiles.size(); i++) {
-            mesh_marker.mesh_resource = cadfiles[i];
-            mesh_marker.pose = poses[i];
-            mesh_control.markers.push_back( mesh_marker );
-        }
+        mesh_marker.mesh_resource = "file://" + this->meshfolder + this->name;
+        mesh_marker.pose.orientation.w = 1;
+        mesh_control.markers.push_back( mesh_marker );
+        
         int_marker.controls.push_back( mesh_control );
         
         mx.name = "move_x";
@@ -268,7 +261,7 @@ public:
         std::cout << all_grasps;
         std::ofstream grasp_file;
         // grasp_file.open( "tmp_markers.yml" );
-        grasp_file.open( this->name );
+        grasp_file.open( this->graspfolder + this->name + ".yml" );
         grasp_file << all_grasps;
         grasp_file.close();
         std::cout << "------------------------------------------------" << '\n';
@@ -282,14 +275,17 @@ int main(int argc, char** args) {
     
     InteractiveMarkerServer server("markers");
     
-    std::string prefix = "package://pbr_resources/meshes/";
-    std::string filename = "Axe.dae";
+    std::string pkgPath = ros::package::getPath("pbr_resources");
+    std::string meshFolder = pkgPath + "/meshes/";
+    std::string graspsFolder = pkgPath + "/grasps/";
     
-    // std::string prefix = "package://pbr_gazebo/models/";
-    // std::string filename = "pringles/pringles.sdf";
+    ROS_WARN("pbr_resources: %s", pkgPath.c_str());
     
-    ObjectGraspManager gm;
-    gm.init(prefix + filename);
+    // std::string mesh = "Axe.dae";
+    std::string mesh = "coke_can.dae";
+    
+    ObjectGraspManager gm(meshFolder, graspsFolder);
+    gm.init(mesh);
     gm.addToServer(server);
     
     server.applyChanges();
