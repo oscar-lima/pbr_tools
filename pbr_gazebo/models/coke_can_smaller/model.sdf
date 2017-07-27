@@ -3,15 +3,16 @@
   <model name="coke_can">
     <link name="link">
       <inertial>
-        <pose>0.0 0.0 0.06 0 0 0</pose>
-        <mass>0.390</mass>
+        <pose>0.0 0.0 0.0 0 0 0</pose>
+	<!-- assume empty can -->
+        <mass>0.050</mass>
         <inertia>
-          <ixx>0.00057943</ixx>
+          <ixx>0.000057943</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.0005792</iyy>
+          <iyy>0.00005792</iyy>
           <iyz>0</iyz>
-          <izz>0.00021674</izz>
+          <izz>0.000021674</izz>
         </inertia>
       </inertial>
       <collision name="collision">
@@ -24,22 +25,24 @@
         <surface>
           <friction>
             <ode>
-              <mu>1.0</mu>
-              <mu2>1.0</mu2>
+              <mu>1000.0</mu>
+              <mu2>1000.0</mu2>
+              <slip1>1.0</slip1>
+              <slip2>1.0</slip2>
             </ode>
           </friction>
           <contact>
             <ode>
               <kp>10000000.0</kp>
               <kd>1.0</kd>
-              <min_depth>0.001</min_depth>
+              <min_depth>0.003</min_depth>
               <max_vel>0.1</max_vel>
             </ode>
           </contact>
         </surface>
       </collision>
       <visual name="visual">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 0 0.0 0 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://coke_can_smaller/meshes/coke_can.dae</uri>
