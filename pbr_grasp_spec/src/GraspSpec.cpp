@@ -188,7 +188,8 @@ public:
         
         // define rotation to point the arrow along the z axis
         tf::Quaternion quat;
-        quat.setRPY(0, -3.1415/2., 0);
+        // quat.setRPY(0, -3.1415/2., 0);
+        quat.setRPY(0, 0, 0); // ?? todo: adjust for arm_tool_link
         tf::Transform rot;
         rot.setRotation(quat);
         

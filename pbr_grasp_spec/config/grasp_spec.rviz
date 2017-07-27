@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /InteractiveMarkers1
-        - /RobotModel1
         - /RobotModel1/Links1
         - /TF1/Frames1
       Splitter Ratio: 0.5
@@ -431,8 +430,8 @@ Visualization Manager:
                                     {}
                                   gripper_right_finger_link:
                                     {}
-                                  object:
-                                    {}
+                                object:
+                                  {}
                 head_1_link:
                   head_2_link:
                     xtion_link:
@@ -453,7 +452,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: gripper_link
+    Fixed Frame: arm_tool_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -474,22 +473,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.65328
+      Distance: 2.44107
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.0719727
-        Y: 0.121702
-        Z: -0.381113
+        X: 0.0508183
+        Y: -0.115916
+        Z: -0.168983
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.799798
+      Pitch: 0.339798
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.89679
+      Yaw: 5.07497
     Saved: ~
 Window Geometry:
   Displays:
