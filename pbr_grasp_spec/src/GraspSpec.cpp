@@ -78,7 +78,8 @@ public:
         this->name = name;        
         // important: relative to gripper_link, that way the inverse of the
         // current pose is the desired pose of the gripper_link to the object!
-        int_marker.header.frame_id = "gripper_link";
+        // int_marker.header.frame_id = "gripper_link";
+        int_marker.header.frame_id = "arm_tool_link";
         
         int_marker.header.stamp = ros::Time::now();
         int_marker.name = name;
@@ -142,7 +143,8 @@ public:
         
         tf::poseMsgToTF(this->currentPose, transform);
         this->tfBroadcast.sendTransform(
-            tf::StampedTransform(transform, ros::Time::now(), "gripper_link", "object"));
+            // tf::StampedTransform(transform, ros::Time::now(), "gripper_link", "object"));
+            tf::StampedTransform(transform, ros::Time::now(), "arm_tool_link", "object"));
     }
     
     InteractiveMarker& getIntMarker() { 
