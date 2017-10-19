@@ -74,12 +74,12 @@ public:
     }
     
     
-    void init(std::string name) {
+    void init(std::string name, std::string frame_id) {
         this->name = name;        
         // important: relative to gripper_link, that way the inverse of the
         // current pose is the desired pose of the gripper_link to the object!
         // int_marker.header.frame_id = "gripper_link";
-        int_marker.header.frame_id = "arm_tool_link";
+        int_marker.header.frame_id = frame_id;
         
         int_marker.header.stamp = ros::Time::now();
         int_marker.name = name;
@@ -144,7 +144,7 @@ public:
         tf::poseMsgToTF(this->currentPose, transform);
         this->tfBroadcast.sendTransform(
             // tf::StampedTransform(transform, ros::Time::now(), "gripper_link", "object"));
-            tf::StampedTransform(transform, ros::Time::now(), "arm_tool_link", "object"));
+            tf::StampedTransform(transform, ros::Time::now(), int_marker.header.frame_id, "object"));
     }
     
     InteractiveMarker& getIntMarker() { 
@@ -275,20 +275,28 @@ public:
 
 int main(int argc, char** args) {
     ros::init(argc, args, "GraspSpec");
+    ros::NodeHandle n("~");
+    
+    std::string pkg, meshFolder, graspsFolder, mesh, target_frame;
+    n.param<std::string>("resource_pkg", pkg, "pbr_resources");
+    n.param<std::string>("mesh_folder", meshFolder, "meshes");
+    n.param<std::string>("grasps_folder", graspsFolder, "grasps");
+    n.param<std::string>("mesh", mesh, "coke_can.dae");
+    n.param<std::string>("target_frame", target_frame, "arm_tool_link");
     
     InteractiveMarkerServer server("markers");
     
-    std::string pkgPath = ros::package::getPath("pbr_resources");
-    std::string meshFolder = pkgPath + "/meshes/";
-    std::string graspsFolder = pkgPath + "/grasps/";
+    std::string pkgPath = ros::package::getPath(pkg);
+    meshFolder = pkgPath + "/" + meshFolder + "/";
+    graspsFolder = pkgPath + "/" + graspsFolder + "/";
     
     ROS_WARN("pbr_resources: %s", pkgPath.c_str());
     
     // std::string mesh = "Axe.dae";
-    std::string mesh = "coke_can.dae";
+    // std::string mesh = "coke_can.dae";
     
     ObjectGraspManager gm(meshFolder, graspsFolder);
-    gm.init(mesh);
+    gm.init(mesh, target_frame);
     gm.addToServer(server);
     
     server.applyChanges();
