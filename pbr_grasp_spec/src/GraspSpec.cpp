@@ -191,6 +191,7 @@ public:
         // quat.setRPY(0, -3.1415/2., 0);
         quat.setRPY(0, 0, 0); // ?? todo: adjust for arm_tool_link
         tf::Transform rot;
+        rot.setIdentity();
         rot.setRotation(quat);
         
         pre = (rot * pre).inverse();
@@ -204,7 +205,8 @@ public:
         int_grasp.originalGrasp = this->grasp;
             
         this->knownGrasps[int_grasp.name] = int_grasp;
-        
+        // ROS_WARN_STREAM(int_grasp);
+        std::cout << int_grasp << std::endl;
         this->server->insert( int_grasp );
         this->menu_rm.apply( *this->server, int_grasp.name );
         this->server->applyChanges();
@@ -283,6 +285,13 @@ int main(int argc, char** args) {
     n.param<std::string>("grasps_folder", graspsFolder, "grasps");
     n.param<std::string>("mesh", mesh, "coke_can.dae");
     n.param<std::string>("target_frame", target_frame, "arm_tool_link");
+    
+    ROS_WARN("GRASP SPEC: %s", pkg.c_str());
+    ROS_WARN("GRASP SPEC: %s", meshFolder.c_str());
+    ROS_WARN("GRASP SPEC: %s", graspsFolder.c_str());
+    ROS_WARN("GRASP SPEC: %s", mesh.c_str());
+    ROS_WARN("GRASP SPEC: %s", target_frame.c_str());
+    // exit(1);
     
     InteractiveMarkerServer server("markers");
     
