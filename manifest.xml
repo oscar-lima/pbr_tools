@@ -1,0 +1,32 @@
+<package>
+  <description brief="Collection of tools for plan-based robot control">
+    This repository contains a collection of tools for plan-based robot control. Currently this contains a gazebo world of our floor in the ICO building in Osnabrück, a map of our floor in the ICO building and rviz-markers for visualizing grasps.
+  </description>
+  <author>Nils Niemann/nils.niemann@dfki.de, Sebastian Stock/sebatian.stock@dfki.de</author>
+  <maintainer>Nils Niemann/nils.niemann@dfki.de, Sebastian Stock/sebastian.stock@dfki.de</maintainer>
+  <license>New BSD</license>
+  <url>https://git.hb.dfki.de/pbr/pbr_tools</url>
+  <logo>none</logo>
+ 
+  <depend package="pbr_envire"/>
+  <depend package="pbr_envire_msgs"/>
+  <depend package="std_msgs"/>
+ 
+  <keywords>
+    <keyword>Control</keyword>
+    <keyword>Plan execution</keyword>
+  </keywords>
+ 
+  <stage>-1</stage>
+  <use>single project</use>
+  <!-- <use>multi project</use> -->
+  <!-- <use>external</use> -->
+  <activity>active</activity>
+  <!-- <activity>pending</activity> -->
+  <!-- <activity>discontinued</activity> -->
+  <classifiers>
+    <classifier>c++</classifier>
+    <classifier>ros</classifier>
+    <classifier>ubuntu</classifier>
+  </classifiers>
+</package>
