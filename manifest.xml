@@ -13,8 +13,7 @@
   <depend package="std_msgs"/>
  
   <keywords>
-    <keyword>Control</keyword>
-    <keyword>Plan execution</keyword>
+    <keyword>Utilities</keyword>
   </keywords>
  
   <stage>-1</stage>
