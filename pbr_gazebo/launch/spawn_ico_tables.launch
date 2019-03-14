@@ -5,43 +5,43 @@
 
  <!-- Tables in room C020 -->
   <node name="spawn_table1_c020" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table1_c020 -x 11.549729 -y -4.689257 -Y -1.578196"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table1_c020 -x 11.549729 -y -4.689257 -Y -1.578196"
         respawn="false" output="screen" />
 
   <node name="spawn_table2_c020" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table2_c020 -x 10.726350 -y -4.678571 -Y -1.578196"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table2_c020 -x 10.726350 -y -4.678571 -Y -1.578196"
         respawn="false" output="screen" />
 
   <node name="spawn_table3_c020" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table3_c020 -x 11.127464 -y -3.465231 -Y 0.0"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table3_c020 -x 11.127464 -y -3.465231 -Y 0.0"
         respawn="false" output="screen" />
 
 
  <!-- Tables in room C022 -->
   <node name="spawn_table1_c022" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table1_c022 -x 15.773074 -y -4.670167 -z 0.00 -Y -1.578196"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table1_c022 -x 15.773074 -y -4.670167 -z 0.00 -Y -1.578196"
         respawn="false" output="screen" />
 
   <node name="spawn_table2_c022" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table2_c022 -x 14.961558 -y -4.668027 -z 0.00 -Y -1.578196"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table2_c022 -x 14.961558 -y -4.668027 -z 0.00 -Y -1.578196"
         respawn="false" output="screen" />
 
   <node name="spawn_table3_c022" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table3_c022 -x 15.364943 -y -3.441525 -z 0.00 -Y 0.00"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table3_c022 -x 15.364943 -y -3.441525 -z 0.00 -Y 0.00"
         respawn="false" output="screen" />
 
 
  <!-- Tables in room C024 -->
   <node name="spawn_table1_c024" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table1_c024 -x 19.035954 -y -4.761148 -Y -1.578196"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table1_c024 -x 19.035954 -y -4.761148 -Y -1.578196"
         respawn="false" output="screen" />
 
   <node name="spawn_table2_c024" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table2_c024 -x 19.855301 -y -4.770370 -Y -1.578196"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table2_c024 -x 19.855301 -y -4.770370 -Y -1.578196"
         respawn="false" output="screen" />
 
   <node name="spawn_table3_c024" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg table_model) -sdf -model table3_c024 -x 19.454639 -y -3.545591 -Y 0.00"
+        args="-gazebo_namespace gazebo -file $(arg table_model) -sdf -model table3_c024 -x 19.454639 -y -3.545591 -Y 0.00"
         respawn="false" output="screen" />
 
 </launch>
