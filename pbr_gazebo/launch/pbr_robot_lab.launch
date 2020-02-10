@@ -1,0 +1,3 @@
+<launch>
+  <param name="pbr_robot_lab_description" command="cat $(find pbr_gazebo)/urdf/pbr_robot_lab.urdf" />
+</launch>
