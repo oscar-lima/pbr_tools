@@ -40,10 +40,7 @@
   <run_depend>vision_msgs</run_depend>
   <run_depend>pbr_maps</run_depend>
 
-
-  <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
+    <gazebo_ros gazebo_media_path="${prefix}"/>
   </export>
 </package>
