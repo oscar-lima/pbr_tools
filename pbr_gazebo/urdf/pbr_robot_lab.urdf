@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<robot name="sensorlab_walls">
+
+  <material name="grey">
+    <color rgba="0.7 0.7 0.7 1" />
+  </material>
+
+  <link name="map">
+    <visual>
+      <origin rpy="0.0 0 0" xyz="0 0 0" />
+      <geometry>
+        <mesh filename="package://pbr_gazebo/Media/models/pbr_robot_lab.stl" />
+      </geometry>
+      <material name="grey" />
+    </visual>
+  </link>
+</robot>

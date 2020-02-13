@@ -1,0 +1,4 @@
+<launch>
+  <arg name="map_file" default="$(find pbr_maps)/maps/moelk/pbr_robot_lab.yaml" />
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+</launch>
