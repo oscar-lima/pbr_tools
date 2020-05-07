@@ -2,18 +2,12 @@
 
 ## Repository Structure
 
-map_langsenkamp_v4.pgm
-- raw pgm made with GIMP#
-- 8-bit colour scale
-
 map_langsenkamp_v4.png
-- Map 
 
 map_langsenkamp_v4.world
 
 map_langsenkamp_v4.yaml
 
-- Started in such a pose that it is close to the container in real life
 
 
 ## Overview
@@ -22,12 +16,10 @@ Frame coordinates corespond to quadrants in coordinate system with the origin in
 
 Type                | Value   
 ---                 | ---   
-
 North               | $` 5797130.5030`$
 East                | $` 442531.6955 `$
 South               | $` 5796854.5382`$
 West                | $` 442006.6057 `$
-
 scale               | $` 1:5000   `$
 Resolution          | $`1000 dpi`$
 Image width         | $`4125 px`$
