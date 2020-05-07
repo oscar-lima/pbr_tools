@@ -1,0 +1,6 @@
+image: map_langsenkamp_v4.pgm
+resolution: 0.127300
+origin: [ 0.000000, 0.000000, 0.00000 ] #centre no rotation
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
