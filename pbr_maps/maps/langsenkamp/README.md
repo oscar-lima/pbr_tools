@@ -16,6 +16,8 @@ Frame coordinates corespond to quadrants in coordinate system with the origin in
 
 Type                | Value   
 ---                 | ---   
+Mid point  [UTM]    | $`442269,1506,5796992.5206`$
+Mid point [Lat/lon] | $`52.32022, 8.15300`$
 North               | $` 5797130.5030`$
 East                | $` 442531.6955 `$
 South               | $` 5796854.5382`$
@@ -28,14 +30,11 @@ Size of map         | $`tbd`$
 Pixel resolution    | $`tbd`$
 Area covered        | $`tbd`$  
 Number of Buildings | $`15`$
-
-<!--- 
-FRAME Mid point     | $`442269.164532297,5796992.52031764`$
 Frame coordinates 1 | $`442528.622940966,5797124.43188242`$
 Frame coordinates 2 | $`442009.706123629,5797124.43188242`$
 Frame coordinates 3 | $`442009.706123629,5796860.60875286`$
 Frame coordinates 4 | $`442528.622940966,5796860.60875286`$
---->
+
 
 measured in ggis (measurement tool):
 519,103 m
