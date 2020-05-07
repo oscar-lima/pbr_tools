@@ -52,6 +52,6 @@ calculated from distance coordinates:
 ![Map Langsenkamp v4](map_langsenkamp_v4.png "Map v4")
 
 
-![Map small v2](explaination_points "Explaination points")
+![Map small v2](explaination_points.png "Explaination points")
 
 The map is only for name reference
