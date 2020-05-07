@@ -27,12 +27,10 @@ Frame coordinates 1 | $`442528.622940966,5797124.43188242`$
 Frame coordinates 2 | $`442009.706123629,5797124.43188242`$
 Frame coordinates 3 | $`442009.706123629,5796860.60875286`$
 Frame coordinates 4 | $`442528.622940966,5796860.60875286`$
-
 scale               | $` 1:5000   `$
 Resolution          | $`1000 dpi`$
 Image width         | $`4125 px`$s
 Image height        | $`2167 px`$
-
 Size of map         | $`tbd`$
 Pixel resolution    | $`tbd`$
 Area covered        | $`tbd`$  
