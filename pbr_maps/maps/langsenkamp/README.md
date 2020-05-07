@@ -34,10 +34,8 @@ Image height        | $`2167 px`$
 Size of map         | $`tbd`$
 Pixel resolution    | $`tbd`$
 Area covered        | $`tbd`$  
+Number of Buildings | $`15`$
 
-Number of Polygons  | $`tbd`$
-Number of Buildings | $`tbd`$
-Number of Fields    | $`tbd`$
 
 
 measured in ggis (measurement tool):
@@ -50,6 +48,10 @@ calculated from distance coordinates:
 
 ## Map
 
-Picture of map
 
-figure with frame coordinates
+![Map Langsenkamp v4](map_langsenkamp_v4.png "Map v4")
+
+
+![Map small v2](explaination_points "Explaination points")
+
+The map is only for name reference
