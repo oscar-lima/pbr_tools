@@ -12,7 +12,6 @@ map_langsenkamp_v4.yaml
 
 ## Overview
 
-Frame coordinates corespond to quadrants in coordinate system with the origin in the middle of the map.: 1: top right; 2: top left; 3: buttom left; 4: buttom right. The Coordinates describe the outer most position of the black frame. 
 
 Type                | Value   
 ---                 | ---   
@@ -34,6 +33,8 @@ Frame coordinates 1 | $`442528.622940966,5797124.43188242`$
 Frame coordinates 2 | $`442009.706123629,5797124.43188242`$
 Frame coordinates 3 | $`442009.706123629,5796860.60875286`$
 Frame coordinates 4 | $`442528.622940966,5796860.60875286`$
+
+Frame coordinates corespond to quadrants in coordinate system with the origin in the middle of the map.: 1: top right; 2: top left; 3: buttom left; 4: buttom right. The Coordinates describe the outer most position of the black frame. 
 
 
 ## Map
