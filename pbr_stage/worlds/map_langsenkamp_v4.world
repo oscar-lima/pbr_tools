@@ -75,13 +75,14 @@ define floorplan model
 floorplan
 ( 
   name "map_langsenkamp_v4"
-  bitmap "../floorplan/map_langsenkamp_v4.png"
-  size [525,0898 275,9648 2]
-  pose [ 0 0 0 90.000 ] #coordinates of the origin of the map, rotation 90 deg
+  bitmap "../floorplans/map_langsenkamp_v4.png"
+  size [525.0898 275.9648 0.5]
+
+  pose [ 0 0 0 0 ] #coordinates of the origin of the map, rotation 90 deg
 )
 
 
 # throw in a robot
-arox( pose [ 0 0 0.000 180.000 ] name "arox" color "blue") 
+arox( pose [ 0 0 0.000 0.000 ] name "arox" color "blue") 
 
 
