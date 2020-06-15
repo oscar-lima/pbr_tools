@@ -22,9 +22,9 @@ window
 define puck ranger
 (  
   sensor( 			
-    range [ 0.0  80.0 ]
-    fov 270
-   samples 270
+    range [ 2.0  80.0 ]
+    fov 361
+   samples 360
   )
   # generic model properties
   color "black"
@@ -34,7 +34,7 @@ define puck ranger
 define tim ranger
 (  
   sensor( 			
-    range [ 0.0  30.0 ]
+    range [ 2.0  30.0 ]
     fov 180
    samples 180
   )
@@ -50,7 +50,7 @@ define arox position
   origin [ 0.0 0.000 0.000 0.0]
   gui_nose 1
   drive "diff"
-  puck(pose [  0.5 0.0 -0.5   0.0 ])
+  puck(pose [  0.5 0.0 -0.5  -90.0 ])
   tim (pose [ -0.5 0.0 -0.5 180])
 )
 
