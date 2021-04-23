@@ -1,4 +1,4 @@
-This package contains a gazebo_world of the ICO office environemnt, and launch files to start gazebo and spawn Tiago in it.
+This package contains a gazebo_world of the ICO office environment, and launch files to start gazebo and spawn Tiago in it.
 
 To start the ICO environment and spawn Tiago, you can use the launch-file launch/tiago_ico.launch.
 Before you start it the first time you have to copy the config-file config/pose.yaml to ~/.pal/pose.yaml.
